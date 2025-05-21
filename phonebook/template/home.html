@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Directory</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        h2 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+        }
+        
+        input[type="submit"] {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        input[type="submit"]:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        th {
+            background-color: rgba(76, 175, 80, 0.3);
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .message {
+            text-align: center;
+            padding: 10px;
+            margin: 15px 0;
+            border-radius: 5px;
+            background: rgba(76, 175, 80, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Add Contact Form -->
+        <div class="card">
+            <h2>Add New Contact</h2>
+            <form action="phn" method="POST" class="add1">
+                {% csrf_token %}
+                <label for="name">Name</label>
+                <input type="text" name="name" placeholder="Enter name" required>
+                
+                <label for="number">Phone Number</label>
+                <input type="number" name="number" placeholder="Enter phone number" required>
+                
+                <input type="submit" value="ADD" class="subdemo3">
+                
+                {% if msg %}
+                <div class="message">{{msg}}</div>
+                {% endif %}
+            </form>
+        </div>
+        
+        <!-- Display Contacts -->
+        <div class="card">
+            <h2>Contact List</h2>
+            <form action="dis">
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone Number</th>
+                    </tr>
+                    {% for i in emp %}
+                    <tr>
+                        <td>{{i.Name}}</td>
+                        <td>{{i.Number}}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <input type="submit" value="Refresh Contacts">
+            </form>
+        </div>
+        
+        <!-- Update Contact -->
+        <div class="card">
+            <h2>Update Contact</h2>
+            <form action="updt" method="POST">
+                {% csrf_token %}
+                <label for="oldname">Current Name</label>
+                <input type="text" name="oldname" placeholder="Enter current name" required>
+                
+                <label for="newname">New Name</label>
+                <input type="text" name="newname" placeholder="Enter new name" required>
+                
+                <input type="submit" value="UPDATE">
+                
+                {% if key %}
+                <div class="message">{{key}}</div>
+                {% endif %}
+            </form>
+        </div>
+        
+        <!-- Delete Contact -->
+        <div class="card">
+            <h2>Delete Contact</h2>
+            <form action="del" method="POST">
+                {% csrf_token %}
+                <label for="dlt">Name to Delete</label>
+                <input type="text" name="dlt" placeholder="Enter name to delete" required>
+                
+                <input type="submit" value="DELETE">
+                
+                {% if del %}
+                <div class="message">{{del}}</div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</body>
+</html>
